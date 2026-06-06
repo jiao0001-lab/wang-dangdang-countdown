@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fbfaf6" />
+    <title>距离王当当高考还有</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #fbfaf6;
+        --paper-warm: #fff8e8;
+        --ink: #2b251d;
+        --muted: #776d5f;
+        --gold: #d4a33f;
+        --gold-bright: #f6d875;
+        --gold-deep: #9e6c13;
+        --money: #9fb7c7;
+        --money-deep: #6d8fa1;
+        --green: #315c51;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.98) 0 28%, rgba(255, 255, 255, 0) 58%),
+          radial-gradient(circle at 78% 70%, rgba(245, 209, 103, 0.28), rgba(245, 209, 103, 0) 32%),
+          radial-gradient(circle at 18% 70%, rgba(139, 171, 190, 0.2), rgba(139, 171, 190, 0) 34%),
+          linear-gradient(180deg, #f5f8f7 0%, var(--paper) 48%, var(--paper-warm) 100%);
+        color: var(--ink);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+          "Microsoft YaHei", sans-serif;
+        letter-spacing: 0;
+      }
+
+      .app {
+        min-height: 100svh;
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        padding: max(20px, env(safe-area-inset-top)) 18px max(20px, env(safe-area-inset-bottom));
+      }
+
+      .app::before {
+        content: "";
+        position: absolute;
+        inset: -12%;
+        z-index: -3;
+        background-image:
+          radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.95) 0 8%, rgba(255, 255, 255, 0) 18%),
+          radial-gradient(circle at 50% 88%, rgba(255, 255, 255, 0.94) 0 10%, rgba(255, 255, 255, 0) 25%),
+          radial-gradient(circle at 82% 82%, rgba(255, 255, 255, 0.93) 0 8%, rgba(255, 255, 255, 0) 22%);
+        filter: blur(2px);
+      }
+
+      .app::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        background:
+          repeating-linear-gradient(
+            110deg,
+            rgba(255, 255, 255, 0.18) 0 1px,
+            rgba(255, 255, 255, 0) 1px 18px
+          );
+        opacity: 0.7;
+        mix-blend-mode: screen;
+      }
+
+      .scene {
+        position: absolute;
+        inset: auto -24vw -12vw;
+        z-index: -1;
+        width: 148vw;
+        height: min(68svh, 660px);
+        min-height: 430px;
+        pointer-events: none;
+      }
+
+      .photo-stage {
+        position: absolute;
+        inset: auto 0 1svh;
+        z-index: -2;
+        height: min(52svh, 500px);
+        margin: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 88%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 16%, #000 88%, transparent 100%);
+        transition: opacity 280ms ease;
+      }
+
+      .photo-stage img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(0.94) brightness(1.05);
+      }
+
+      .photo-stage::before,
+      .photo-stage::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .photo-stage::before {
+        background:
+          linear-gradient(180deg, var(--paper) 0%, rgba(251, 250, 246, 0.72) 16%, rgba(251, 250, 246, 0.08) 40%),
+          linear-gradient(90deg, rgba(251, 250, 246, 0.86), rgba(251, 250, 246, 0) 22%, rgba(251, 250, 246, 0) 78%, rgba(251, 250, 246, 0.86));
+      }
+
+      .photo-stage::after {
+        background: linear-gradient(0deg, rgba(251, 250, 246, 0.92) 0%, rgba(251, 250, 246, 0) 30%);
+      }
+
+      .app.has-photo .photo-stage {
+        opacity: 1;
+      }
+
+      .app.has-photo .scene {
+        opacity: 0;
+      }
+
+      .app.has-photo .countdown {
+        padding-bottom: 36svh;
+      }
+
+      .countdown {
+        width: min(620px, 100%);
+        margin: 0 auto;
+        align-self: center;
+        display: grid;
+        justify-items: center;
+        text-align: center;
+        padding: 8svh 0 24svh;
+      }
+
+      .date-chip {
+        margin: 0 0 18px;
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 0 14px;
+        border: 1px solid rgba(202, 158, 65, 0.38);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.62);
+        color: var(--gold-deep);
+        font-size: 14px;
+        font-weight: 800;
+        box-shadow: 0 14px 40px rgba(158, 108, 19, 0.08);
+        backdrop-filter: blur(10px);
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 12em;
+        color: var(--green);
+        font-size: clamp(26px, 7.4vw, 50px);
+        line-height: 1.16;
+        font-weight: 900;
+        letter-spacing: 0;
+        text-wrap: balance;
+      }
+
+      .days {
+        margin-top: 10px;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: clamp(8px, 2vw, 16px);
+        width: 100%;
+        color: var(--ink);
+      }
+
+      .days-number {
+        font-size: clamp(76px, 23vw, 174px);
+        line-height: 0.9;
+        font-weight: 950;
+        color: var(--gold-deep);
+        font-variant-numeric: tabular-nums;
+        text-shadow:
+          0 2px 0 rgba(255, 255, 255, 0.84),
+          0 18px 45px rgba(158, 108, 19, 0.16);
+      }
+
+      .days-unit {
+        font-size: clamp(30px, 8.5vw, 58px);
+        line-height: 1;
+        font-weight: 900;
+        color: var(--green);
+      }
+
+      .wish {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: clamp(15px, 4vw, 18px);
+        font-weight: 700;
+      }
+
+      .footer {
+        width: min(620px, 100%);
+        margin: 0 auto;
+        color: rgba(43, 37, 29, 0.58);
+        font-size: 13px;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      .scene .blanket {
+        fill: rgba(255, 255, 255, 0.9);
+        filter: drop-shadow(0 -20px 40px rgba(101, 92, 80, 0.08));
+      }
+
+      .scene .fold {
+        fill: none;
+        stroke: rgba(216, 217, 212, 0.9);
+        stroke-width: 5;
+        stroke-linecap: round;
+        opacity: 0.7;
+      }
+
+      .scene .bill {
+        fill: rgba(236, 246, 248, 0.86);
+        stroke: rgba(98, 134, 153, 0.52);
+        stroke-width: 3;
+        filter: drop-shadow(0 16px 18px rgba(86, 104, 112, 0.12));
+      }
+
+      .scene .bill-line {
+        stroke: rgba(109, 143, 161, 0.58);
+        stroke-width: 3;
+        stroke-linecap: round;
+      }
+
+      .scene .bill-seal {
+        fill: rgba(109, 143, 161, 0.2);
+        stroke: rgba(109, 143, 161, 0.42);
+        stroke-width: 3;
+      }
+
+      .scene .bar-top {
+        fill: var(--gold-bright);
+      }
+
+      .scene .bar-side {
+        fill: var(--gold);
+      }
+
+      .scene .bar-front {
+        fill: #bf8320;
+      }
+
+      .scene .coin {
+        fill: url(#coinGold);
+        stroke: rgba(157, 101, 11, 0.45);
+        stroke-width: 3;
+        filter: drop-shadow(0 10px 10px rgba(157, 101, 11, 0.14));
+      }
+
+      .scene .coin-mark {
+        fill: none;
+        stroke: rgba(157, 101, 11, 0.45);
+        stroke-width: 3;
+      }
+
+      .scene .bundle {
+        fill: rgba(255, 255, 255, 0.92);
+        stroke: rgba(225, 226, 219, 0.88);
+        stroke-width: 4;
+        filter: drop-shadow(0 20px 28px rgba(93, 84, 75, 0.08));
+      }
+
+      .scene .collar {
+        fill: rgba(239, 186, 65, 0.52);
+      }
+
+      @media (min-width: 760px) {
+        .countdown {
+          padding-top: 3svh;
+          padding-bottom: 18svh;
+        }
+
+        .scene {
+          inset: auto -10vw -18vw;
+          width: 120vw;
+          height: min(72svh, 720px);
+        }
+
+        .photo-stage {
+          bottom: 0;
+          height: min(54svh, 540px);
+        }
+      }
+
+      @media (max-width: 380px) {
+        .app {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .countdown {
+          padding-bottom: 28svh;
+        }
+
+        .app.has-photo .countdown {
+          padding-bottom: 38svh;
+        }
+
+        .days-number {
+          font-size: clamp(70px, 22vw, 96px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <figure class="photo-stage" aria-hidden="true">
+        <img id="memoryPhoto" src="assets/wang-dangdang.jpg" alt="" />
+      </figure>
+
+      <svg class="scene" viewBox="0 0 900 720" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="coinGold" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#ffe68b" />
+            <stop offset="0.42" stop-color="#efbf3e" />
+            <stop offset="1" stop-color="#b87919" />
+          </linearGradient>
+        </defs>
+
+        <path class="blanket" d="M-40 355C68 305 148 346 234 325c105-26 136-84 235-61 88 21 110 86 204 89 81 3 138-34 255 28v370H-40Z" />
+        <path class="fold" d="M42 451c93-58 181-45 270-13 70 25 142 23 224-19 87-44 166-34 271 18" />
+        <path class="fold" d="M70 585c103-51 197-48 278-15 94 37 151 31 246-20 76-41 150-30 241 13" />
+        <path class="fold" d="M300 335c-25 59-24 118 0 176M592 346c29 61 33 118 13 171" />
+
+        <g transform="translate(398 222)">
+          <path class="bundle" d="M55 17c72 0 118 59 114 130-5 90-74 135-154 117-71-15-112-68-100-139C-74 58-24 17 55 17Z" />
+          <path class="bundle" d="M-69 125c42-36 91-49 147-39 43 8 78 29 105 62-18 56-57 91-113 103-60 14-112-1-157-44 3-34 8-58 18-82Z" />
+          <path class="collar" d="M-22 94c29-13 64-14 95 1-10 25-25 43-45 53-20-11-36-27-50-54Z" />
+        </g>
+
+        <g transform="translate(100 338) rotate(-17)">
+          <rect class="bill" width="170" height="78" rx="8" />
+          <circle class="bill-seal" cx="85" cy="39" r="19" />
+          <path class="bill-line" d="M18 20h38M114 20h38M18 58h38M114 58h38" />
+        </g>
+        <g transform="translate(650 362) rotate(19)">
+          <rect class="bill" width="174" height="82" rx="8" />
+          <circle class="bill-seal" cx="87" cy="41" r="20" />
+          <path class="bill-line" d="M20 21h40M116 21h40M20 61h40M116 61h40" />
+        </g>
+        <g transform="translate(210 474) rotate(9)">
+          <rect class="bill" width="150" height="68" rx="8" />
+          <circle class="bill-seal" cx="75" cy="34" r="16" />
+          <path class="bill-line" d="M18 18h32M100 18h32M18 50h32M100 50h32" />
+        </g>
+        <g transform="translate(570 512) rotate(-10)">
+          <rect class="bill" width="160" height="72" rx="8" />
+          <circle class="bill-seal" cx="80" cy="36" r="17" />
+          <path class="bill-line" d="M18 19h35M107 19h35M18 53h35M107 53h35" />
+        </g>
+
+        <g transform="translate(210 316) rotate(-14)">
+          <polygon class="bar-top" points="28 0 145 0 176 54 0 54" />
+          <polygon class="bar-side" points="0 54 176 54 148 90 21 90" />
+          <polygon class="bar-front" points="28 0 0 54 21 90 48 36" />
+        </g>
+        <g transform="translate(632 305) rotate(11)">
+          <polygon class="bar-top" points="28 0 150 0 184 58 0 58" />
+          <polygon class="bar-side" points="0 58 184 58 154 96 22 96" />
+          <polygon class="bar-front" points="28 0 0 58 22 96 52 38" />
+        </g>
+
+        <g transform="translate(104 520)">
+          <circle class="coin" cx="0" cy="0" r="25" />
+          <path class="coin-mark" d="M-10-2h20M0-12v24" />
+        </g>
+        <g transform="translate(168 590)">
+          <circle class="coin" cx="0" cy="0" r="20" />
+          <path class="coin-mark" d="M-8-1h16M0-10v20" />
+        </g>
+        <g transform="translate(775 515)">
+          <circle class="coin" cx="0" cy="0" r="24" />
+          <path class="coin-mark" d="M-10-1h20M0-12v24" />
+        </g>
+        <g transform="translate(820 605)">
+          <circle class="coin" cx="0" cy="0" r="18" />
+          <path class="coin-mark" d="M-7-1h14M0-9v18" />
+        </g>
+        <g transform="translate(308 604)">
+          <circle class="coin" cx="0" cy="0" r="19" />
+          <path class="coin-mark" d="M-8-1h16M0-9v18" />
+        </g>
+      </svg>
+
+      <main class="countdown" id="countdown" aria-live="polite">
+        <p class="date-chip" id="dateText">2037年6月7日</p>
+        <h1 id="headline">距离王当当高考还有</h1>
+        <div class="days">
+          <span class="days-number" id="daysNumber">0</span>
+          <span class="days-unit" id="daysUnit">天</span>
+        </div>
+        <p class="wish" id="wishText">金榜题名，一路生花</p>
+      </main>
+
+      <footer class="footer" id="todayText">今天</footer>
+    </div>
+
+    <script>
+      const targetDate = "2037-06-07";
+      const eventName = "王当当高考";
+
+      const els = {
+        countdown: document.querySelector("#countdown"),
+        app: document.querySelector(".app"),
+        memoryPhoto: document.querySelector("#memoryPhoto"),
+        dateText: document.querySelector("#dateText"),
+        headline: document.querySelector("#headline"),
+        daysNumber: document.querySelector("#daysNumber"),
+        daysUnit: document.querySelector("#daysUnit"),
+        wishText: document.querySelector("#wishText"),
+        todayText: document.querySelector("#todayText"),
+      };
+
+      function getLocalToday() {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      }
+
+      function toDateInputValue(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatDate(dateValue) {
+        const [year, month, day] = dateValue.split("-").map(Number);
+        const date = new Date(year, month - 1, day);
+        return new Intl.DateTimeFormat("zh-CN", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          weekday: "short",
+        }).format(date);
+      }
+
+      function daysBetween(dateValue) {
+        const today = getLocalToday();
+        const [year, month, day] = dateValue.split("-").map(Number);
+        const target = new Date(year, month - 1, day);
+        const todayUtc = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+        const targetUtc = Date.UTC(target.getFullYear(), target.getMonth(), target.getDate());
+        return Math.round((targetUtc - todayUtc) / 86400000);
+      }
+
+      function render() {
+        const diff = daysBetween(targetDate);
+        const absDiff = Math.abs(diff);
+
+        els.dateText.textContent = formatDate(targetDate);
+        els.daysNumber.textContent = String(absDiff);
+        els.todayText.textContent = `今天是 ${formatDate(toDateInputValue(getLocalToday()))}`;
+
+        if (diff > 0) {
+          els.headline.textContent = `距离${eventName}还有`;
+          els.daysUnit.textContent = "天";
+          els.wishText.textContent = "金榜题名，一路生花";
+          els.countdown.setAttribute("aria-label", `距离${eventName}还有${absDiff}天`);
+          document.title = `距离${eventName}还有 ${absDiff} 天`;
+        } else if (diff === 0) {
+          els.headline.textContent = `${eventName}就在今天`;
+          els.daysUnit.textContent = "天";
+          els.wishText.textContent = "从容上场，得偿所愿";
+          els.countdown.setAttribute("aria-label", `${eventName}就在今天`);
+          document.title = `${eventName}就在今天`;
+        } else {
+          els.headline.textContent = `${eventName}已经过去`;
+          els.daysUnit.textContent = "天";
+          els.wishText.textContent = "每一步都算数";
+          els.countdown.setAttribute("aria-label", `${eventName}已经过去${absDiff}天`);
+          document.title = `${eventName}已经过去 ${absDiff} 天`;
+        }
+      }
+
+      els.memoryPhoto.addEventListener("load", () => {
+        els.app.classList.add("has-photo");
+      });
+
+      els.memoryPhoto.addEventListener("error", () => {
+        els.memoryPhoto.removeAttribute("src");
+        els.app.classList.remove("has-photo");
+      });
+
+      render();
+      window.setInterval(render, 60 * 1000);
+    </script>
+  </body>
+</html>
